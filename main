@@ -9,6 +9,7 @@ Items 1-12
 #include <fstream>
 #include <time.h>
 #include <string>
+#include <math.h>
 using namespace std;
 
 struct person{   
@@ -195,9 +196,8 @@ int main(){
                         age = getAge(strDOB);
                         //cout << age <<" || ";
                         if(age >= 65.00){ 
-                            cout << current->pName << " | " << current->pSSN << " | " << current->gender << " | " << current->DOB << " | " 
-                                 << current->height << " | " << current->weight << " | " << current->fSSN << " | "  << current->mSSN << " | " <<  endl ;
-                        }
+                            cout << current->pName << " || " << current->DOB << " || " << age << endl;
+                            }
                         current = current->next;
                     }
                     current = head;
@@ -208,11 +208,9 @@ int main(){
     	            cout << "These residents are at high risk of cardiovascular disease: " << endl;
     	            while(current != NULL) {
     	                float BMI = getBMI(current->height, current->weight);
-    	                cout << BMI << " || ";
     	                if(BMI > 27) {
-    	                    cout << current->pName << " | " << current->pSSN << " | " << current->gender << " | " << current->DOB << " | " 
-                                 << current->height << " | " << current->weight << " | " << current->fSSN << " | "  << current->mSSN << " | " <<  endl ;
-    	                }
+    	                    cout << current->pName << " || " << BMI  << endl;
+    	                    }
     	                current = current->next;
     	            }
     	            current = head;
@@ -220,15 +218,21 @@ int main(){
     	            break;
     	        }
     	        case 8: {
-    	            cout << "The male-to-female ratio of the county population: " << endl;
-    	            int mCount = 0;
-    	            int fCount = 0;
+    	            cout << "The females per thousand males ratio of the county population: " << endl;
+    	            int males = 0;
+    	            int females = 0;
+    	            int FemaleRatio;
     	            while (current != NULL) {
-    	                if(current->gender == 'M') mCount++;
-    	                if(current->gender == 'F') fCount++;
+    	                if(current->gender == 'M') males++;
+    	                if(current->gender == 'F') females++;
     	                current = current->next;
+    	                
     	            }
-    	            cout << mCount << " males : " << fCount << " females" << endl;
+    	            
+    	            FemaleRatio =  ((females * 1000) / males);
+    	            
+    	            cout << "females: " << females << " || " << " males: " << males  << endl;
+    	            cout << FemaleRatio << " females per 1000 males" << endl;
     	            current = head;
     	            cout << endl << endl;
     	            break;
@@ -269,7 +273,8 @@ void display_list(person *head){
 int display_menu() {
     cout << endl << endl << "COUNTY'S RESIDENT MANAGEMENT SYSTEM" << endl;
     cout << endl << "Select an option from the following list: " << endl;
-    cout << " [01] Display all persons by SSN " << endl
+    cout << " [00] Quit" << endl 
+         << " [01] Display all persons by SSN " << endl
          << " [02] Remove person from list " << endl
          << " [03] Add person to list " << endl
          << " [04] Add people to list from file " << endl
@@ -451,7 +456,7 @@ float getAge(string strDOB) {
 }
 
 float getBMI (float height, float weight) {
-        float BMI = (weight / 2.2) / ((height * 0.0254) * (height * 0.0254));
+        float BMI = (((weight) * 703) / (pow (height , 2)));
         return BMI;
 }
 
